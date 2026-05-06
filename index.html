@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Enduraw — Readiness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #080E1D;
+  --card:    #0F1829;
+  --card2:   #152034;
+  --orange:  #FF5F1F;
+  --cyan:    #00C9E0;
+  --purple:  #7B5EA7;
+  --green:   #4ade80;
+  --text:    #FFFFFF;
+  --muted:   #6B7A99;
+  --border:  #1E2D47;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); font-family: 'Space Grotesk', sans-serif; color: var(--text); overflow: hidden; }
+#app { width: 100%; max-width: 390px; height: 100dvh; margin: 0 auto; background: var(--bg); position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.screen { display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 16px 20px 32px; animation: fadeIn .2s ease; }
+.screen.active { display: flex; }
+.screen::-webkit-scrollbar { display: none; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.logo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-top: 4px; flex-shrink: 0; }
+.logo-wrap { display: flex; align-items: center; gap: 8px; }
+.top-icons { display: flex; gap: 8px; align-items: center; }
+.top-ico { width: 32px; height: 32px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.profil-ico { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,201,224,.12); border: 1px solid rgba(0,201,224,.25); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--cyan); cursor: pointer; }
+
+.btn { width: 100%; background: var(--orange); border: none; border-radius: 14px; padding: 15px; font-size: 14px; font-weight: 700; color: #fff; cursor: pointer; font-family: 'Space Grotesk', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity .15s, transform .1s; flex-shrink: 0; }
+.btn:active { opacity: .85; transform: scale(.98); }
+.btn-ghost { width: 100%; background: transparent; border: 1px solid var(--border); border-radius: 14px; padding: 14px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Space Grotesk', sans-serif; transition: border-color .15s; margin-bottom: 10px; }
+.btn-ghost:hover { border-color: var(--cyan); }
+.btn-danger { width: 100%; background: transparent; border: 1px solid rgba(255,95,31,.3); border-radius: 14px; padding: 14px; font-size: 13px; font-weight: 600; color: var(--orange); cursor: pointer; font-family: 'Space Grotesk', sans-serif; transition: border-color .15s; }
+.btn-danger:hover { border-color: var(--orange); }
+.btn-done { width: 100%; background: var(--card); border: 1px solid rgba(0,201,224,.3); border-radius: 14px; padding: 14px; font-size: 13px; font-weight: 700; color: var(--cyan); cursor: default; font-family: 'Space Grotesk', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 12px; }
+.sec-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; color: var(--muted); margin-bottom: 10px; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.page-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.pdots { display: flex; gap: 6px; margin-bottom: 20px; flex-shrink: 0; }
+.pd { flex: 1; height: 3px; border-radius: 2px; background: var(--border); }
+.pd.done { background: var(--orange); }
+.pd.cur  { background: var(--cyan); }
+
+/* ACCUEIL */
+.greeting { font-size: 13px; color: var(--muted); margin-bottom: 1px; }
+.big-name { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 18px; }
+.ycard { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.yring { width: 58px; height: 58px; position: relative; flex-shrink: 0; }
+.yring svg { width: 58px; height: 58px; }
+.ynum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--cyan); }
+.yi .yl { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.yi .yv { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.yi .yd { font-size: 10px; color: var(--muted); }
+.dots { display: flex; gap: 6px; margin-bottom: 18px; }
+.dc { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.dl { font-size: 9px; color: var(--muted); }
+.dd { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.dd-done { background: rgba(0,201,224,.15); color: var(--cyan); border: 1px solid rgba(0,201,224,.25); }
+.dd-empty { background: #1E2D47; color: var(--muted); }
+.dd-today { width: 34px; height: 34px; border-radius: 50%; border: 2px dashed var(--cyan); display: flex; align-items: center; justify-content: center; }
+.today-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); }
+.progress-strip { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+.ps-steps { display: flex; }
+.ps-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+.ps-step:not(:last-child)::after { content: ''; position: absolute; top: 11px; left: 55%; width: 90%; height: 2px; background: var(--border); z-index: 0; }
+.ps-step.done:not(:last-child)::after { background: rgba(0,201,224,.35); }
+.ps-circle { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+.ps-circle.done   { background: rgba(0,201,224,.15); border: 1px solid rgba(0,201,224,.4); }
+.ps-circle.active { background: var(--orange); }
+.ps-circle.locked { background: var(--card2); border: 1px solid var(--border); }
+.ps-name { font-size: 9px; color: var(--muted); text-align: center; }
+.ps-name.active { color: var(--orange); }
+.ps-name.done   { color: var(--cyan); }
+.stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 2px 2px 0 0; }
+.stat-card.c1::before { background: var(--cyan); }
+.stat-card.c2::before { background: var(--orange); }
+.stat-card.c3::before { background: var(--purple); }
+.stat-val { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 2px; line-height: 1; }
+.stat-lbl { font-size: 9px; color: var(--muted); line-height: 1.3; }
+.stat-trend { font-size: 9px; margin-top: 4px; }
+.stat-trend.up   { color: var(--green); }
+.stat-trend.same { color: var(--muted); }
+.stat-trend.down { color: var(--orange); }
+
+/* RESSENTI */
+.feel-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
+.feel-btn { background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 12px 4px; text-align: center; cursor: pointer; transition: border-color .15s, transform .1s, background .15s; }
+.feel-btn:active { transform: scale(.95); }
+.feel-btn[data-val="1"].sel { border-color: #6B7A99; background: rgba(107,122,153,.12); }
+.feel-btn[data-val="2"].sel { border-color: #7B5EA7; background: rgba(123,94,167,.12); }
+.feel-btn[data-val="3"].sel { border-color: #00C9E0; background: rgba(0,201,224,.12); }
+.feel-btn[data-val="4"].sel { border-color: #4ade80; background: rgba(74,222,128,.12); }
+.feel-btn[data-val="5"].sel { border-color: #FF5F1F; background: rgba(255,95,31,.12); }
+.feel-btn[data-val="1"].sel .feel-lbl { color: #6B7A99; }
+.feel-btn[data-val="2"].sel .feel-lbl { color: #7B5EA7; }
+.feel-btn[data-val="3"].sel .feel-lbl { color: #00C9E0; }
+.feel-btn[data-val="4"].sel .feel-lbl { color: #4ade80; }
+.feel-btn[data-val="5"].sel .feel-lbl { color: #FF5F1F; }
+.feel-emoji { font-size: 24px; margin: 0 auto 6px; line-height: 1; transition: transform .15s; }
+.feel-btn.sel .feel-emoji { transform: scale(1.2); }
+.feel-lbl { font-size: 9px; color: var(--muted); line-height: 1.2; }
+.word-input { width: 100%; background: transparent; border: none; outline: none; font-size: 13px; color: var(--text); font-family: 'Space Grotesk', sans-serif; padding: 4px 0; }
+.word-input::placeholder { color: var(--border); }
+
+/* HOOPER */
+.qcard { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 10px; }
+.qlabel { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.sends { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+.slider-wrap { position: relative; padding: 8px 0; margin-bottom: 4px; }
+.slider-track { width: 100%; height: 4px; background: var(--border); border-radius: 2px; position: relative; cursor: pointer; }
+.slider-fill { height: 4px; background: var(--orange); border-radius: 2px; pointer-events: none; }
+.slider-thumb { width: 20px; height: 20px; background: var(--orange); border-radius: 50%; position: absolute; top: -8px; transform: translateX(-50%); border: 2px solid var(--bg); pointer-events: none; box-shadow: 0 0 8px rgba(255,95,31,.4); }
+.sval { font-size: 11px; color: var(--orange); text-align: right; font-weight: 600; margin-top: 2px; }
+
+/* STROOP */
+.stroop-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 12px; }
+.s-chrono { font-size: 36px; font-weight: 700; color: var(--cyan); margin-bottom: 14px; font-variant-numeric: tabular-nums; }
+.s-word { font-size: 32px; font-weight: 700; margin-bottom: 20px; letter-spacing: .04em; }
+.s-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.scb { border: none; border-radius: 12px; padding: 14px; font-size: 13px; font-weight: 700; color: #fff; cursor: pointer; font-family: 'Space Grotesk', sans-serif; transition: opacity .1s, transform .1s; }
+.scb:active { opacity: .8; transform: scale(.96); }
+.s-feedback { font-size: 13px; text-align: center; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-weight: 600; }
+.s-feedback.correct { background: rgba(74,222,128,.1); color: var(--green); }
+.s-feedback.wrong   { background: rgba(255,95,31,.1); color: var(--orange); }
+
+/* RECAP */
+.rc-center { text-align: center; margin-bottom: 16px; }
+.rc-big { font-size: 64px; font-weight: 700; color: var(--cyan); line-height: 1; }
+.rc-badge-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 6px 0 10px; }
+.rc-badge { display: inline-block; background: rgba(0,201,224,.1); color: var(--cyan); border: 1px solid rgba(0,201,224,.25); font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 20px; }
+.rc-info-btn { width: 18px; height: 18px; border-radius: 50%; background: rgba(123,94,167,.15); border: 1px solid rgba(123,94,167,.35); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; color: var(--purple); font-weight: 700; flex-shrink: 0; line-height: 1; }
+.mrow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.mc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; }
+.mv { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.mv-sub { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+.ml { font-size: 9px; color: var(--muted); margin-top: 4px; }
+.sync-card { background: rgba(0,201,224,.05); border: 1px solid rgba(0,201,224,.2); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+
+/* Modal */
+.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 100; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn .15s ease; }
+.modal-sheet { background: var(--card); border: 1px solid var(--border); border-radius: 20px 20px 0 0; padding: 20px; width: 100%; }
+.modal-handle { width: 36px; height: 3px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+.modal-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+.calc-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.calc-row:last-child { border-bottom: none; }
+.calc-lbl { font-size: 12px; color: var(--muted); }
+.calc-pts { font-size: 12px; font-weight: 700; color: var(--purple); }
+.calc-total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 4px; border-top: 1px solid rgba(0,201,224,.2); }
+.calc-total-lbl { font-size: 13px; font-weight: 700; color: var(--text); }
+.calc-total-val { font-size: 15px; font-weight: 700; color: var(--cyan); }
+
+/* DASHBOARD */
+.dash-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.dash-tab { flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--border); background: transparent; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Space Grotesk', sans-serif; transition: all .15s; text-align: center; }
+.dash-tab.active { background: rgba(0,201,224,.1); border-color: rgba(0,201,224,.3); color: var(--cyan); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-bottom: 6px; }
+.bar { flex: 1; border-radius: 4px 4px 0 0; background: var(--card2); cursor: pointer; transition: opacity .15s; }
+.bar:hover { opacity: .75; }
+.bar.hi { background: var(--cyan); }
+.bdays { display: flex; gap: 6px; margin-bottom: 10px; }
+.bd { flex: 1; font-size: 9px; color: var(--muted); text-align: center; }
+.bd.t { color: var(--cyan); }
+.bar-tooltip { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; display: none; animation: fadeIn .15s ease; }
+.bar-tooltip.visible { display: block; }
+.drow { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.drow:last-child { border-bottom: none; }
+.dlbl { font-size: 12px; color: var(--muted); }
+.dval { font-size: 12px; font-weight: 700; color: var(--cyan); }
+
+/* CALENDRIER */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 8px; }
+.cal-header { font-size: 9px; color: var(--muted); text-align: center; padding: 4px 0; }
+.cal-day { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; cursor: default; }
+.cal-day.empty { background: transparent; color: transparent; pointer-events: none; }
+.cal-day.no-data { background: var(--card2); color: var(--muted); }
+.cal-day.has-data { background: rgba(0,201,224,.15); color: var(--cyan); border: 1px solid rgba(0,201,224,.25); cursor: pointer; }
+.cal-day.has-data:hover { background: rgba(0,201,224,.28); }
+.cal-day.is-today.no-data { border: 1px dashed var(--muted); }
+.cal-day.done-today { background: rgba(255,95,31,.15); color: var(--orange); border: 1px solid rgba(255,95,31,.3); cursor: pointer; }
+.cal-detail { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; animation: fadeIn .15s ease; }
+.cal-detail-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.cal-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.cal-row:last-child { border-bottom: none; }
+.cal-lbl { font-size: 11px; color: var(--muted); }
+.cal-val { font-size: 11px; font-weight: 700; color: var(--cyan); }
+
+/* PROFIL */
+.profil-avatar { width: 64px; height: 64px; border-radius: 50%; background: rgba(0,201,224,.12); border: 2px solid rgba(0,201,224,.25); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: var(--cyan); margin: 8px auto 10px; }
+.prow { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.prow:last-child { border-bottom: none; }
+.plbl { font-size: 13px; color: var(--muted); }
+.pval { font-size: 13px; font-weight: 600; color: var(--text); }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- SCREEN 0 — ACCUEIL -->
+  <div id="s0" class="screen active">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:15px;font-weight:700;color:var(--cyan);letter-spacing:.04em;">ENDURAW</span>
+      </div>
+      <div class="top-icons">
+        <div class="top-ico" onclick="go('s5')" title="Historique">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="2" stroke="#6B7A99" stroke-width="1.3"/><path d="M4 3V2a1 1 0 012 0v1M8 3V2a1 1 0 012 0v1" stroke="#6B7A99" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="profil-ico" onclick="go('s6')">TM</div>
+      </div>
+    </div>
+    <div class="greeting">Bonjour,</div>
+    <div class="big-name">Thomas</div>
+    <div class="ycard">
+      <div class="yring">
+        <svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#1E2D47" stroke-width="5"/><circle cx="29" cy="29" r="24" fill="none" stroke="#00C9E0" stroke-width="5" stroke-dasharray="0 150" stroke-linecap="round" transform="rotate(-90 29 29)" id="yesterday-ring"/></svg>
+        <div class="ynum" id="yesterday-score">—</div>
+      </div>
+      <div class="yi">
+        <div class="yl">Score d'hier</div>
+        <div class="yv" id="yesterday-label">—</div>
+        <div class="yd" id="yesterday-detail">Complète ton premier check-in</div>
+      </div>
+    </div>
+    <div class="sec-label">CETTE SEMAINE</div>
+    <div class="dots" id="week-dots"></div>
+    <div class="progress-strip">
+      <div class="sec-label" style="margin-bottom:12px;">CHECK-IN DU JOUR</div>
+      <div class="ps-steps" id="progress-steps"></div>
+    </div>
+    <button class="btn" id="main-cta" onclick="handleCTA()">
+      Commencer le check-in
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="sec-label" style="margin-top:16px;">MES STATS</div>
+    <div class="stats-row">
+      <div class="stat-card c1">
+        <div class="stat-val" id="stats-avg">—</div>
+        <div class="stat-lbl">Score moy. 7j</div>
+        <div class="stat-trend same" id="stats-avg-trend">—</div>
+      </div>
+      <div class="stat-card c2">
+        <div class="stat-val" id="streak-val">0</div>
+        <div class="stat-lbl">Jours consécutifs</div>
+        <div class="stat-trend up">🔥</div>
+      </div>
+      <div class="stat-card c3">
+        <div class="stat-val" id="stats-best">—</div>
+        <div class="stat-lbl">Meilleur score</div>
+        <div class="stat-trend up" id="stats-best-day">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1 — RESSENTI -->
+  <div id="s1" class="screen">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:13px;font-weight:700;color:var(--cyan);">ENDURAW</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted);">1 / 3</span>
+    </div>
+    <div class="pdots"><div class="pd cur"></div><div class="pd"></div><div class="pd"></div></div>
+    <div class="page-title">Comment tu te sens ?</div>
+    <div style="margin-bottom:18px;"></div>
+    <div class="feel-grid">
+      <div class="feel-btn" data-val="1" onclick="selFeel(this)"><div class="feel-emoji">😴</div><div class="feel-lbl">Épuisé</div></div>
+      <div class="feel-btn" data-val="2" onclick="selFeel(this)"><div class="feel-emoji">😔</div><div class="feel-lbl">Fatigué</div></div>
+      <div class="feel-btn" data-val="3" onclick="selFeel(this)"><div class="feel-emoji">😐</div><div class="feel-lbl">Neutre</div></div>
+      <div class="feel-btn" data-val="4" onclick="selFeel(this)"><div class="feel-emoji">🙂</div><div class="feel-lbl">Bien</div></div>
+      <div class="feel-btn" data-val="5" onclick="selFeel(this)"><div class="feel-emoji">⚡️</div><div class="feel-lbl">Top forme</div></div>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Un mot pour décrire ta journée <span style="opacity:.4;">(optionnel)</span></div>
+      <input class="word-input" id="ressenti-mot" type="text" placeholder="ex : lourd, léger, motivé...">
+    </div>
+    <button class="btn" onclick="saveRessenti()">Suivant — Hooper <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+
+  <!-- SCREEN 2 — HOOPER -->
+  <div id="s2" class="screen">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:13px;font-weight:700;color:var(--cyan);">ENDURAW</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted);">2 / 3</span>
+    </div>
+    <div class="pdots"><div class="pd done"></div><div class="pd cur"></div><div class="pd"></div></div>
+    <div class="page-title">Hooper Index</div>
+    <div class="page-sub">Comment s'est passée ta nuit et ta récup ?</div>
+    <div class="qcard">
+      <div class="qlabel">Qualité du sommeil</div>
+      <div class="sends"><span>Très mauvaise</span><span>Excellente</span></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-0" onclick="setSlider(0,event)"><div class="slider-fill" id="fill-0" style="width:50%;"></div><div class="slider-thumb" id="thumb-0" style="left:50%;"></div></div></div>
+      <div class="sval" id="val-0">4 / 7</div>
+    </div>
+    <div class="qcard">
+      <div class="qlabel">Niveau de fatigue</div>
+      <div class="sends"><span>Très fatigué</span><span>Plein d'énergie</span></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-1" onclick="setSlider(1,event)"><div class="slider-fill" id="fill-1" style="width:50%;"></div><div class="slider-thumb" id="thumb-1" style="left:50%;"></div></div></div>
+      <div class="sval" id="val-1">4 / 7</div>
+    </div>
+    <div class="qcard">
+      <div class="qlabel">Niveau de stress</div>
+      <div class="sends"><span>Très stressé</span><span>Très serein</span></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-2" onclick="setSlider(2,event)"><div class="slider-fill" id="fill-2" style="width:50%;"></div><div class="slider-thumb" id="thumb-2" style="left:50%;"></div></div></div>
+      <div class="sval" id="val-2">4 / 7</div>
+    </div>
+    <div class="qcard">
+      <div class="qlabel">Douleurs musculaires</div>
+      <div class="sends"><span>Très douloureuses</span><span>Aucune douleur</span></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-3" onclick="setSlider(3,event)"><div class="slider-fill" id="fill-3" style="width:50%;"></div><div class="slider-thumb" id="thumb-3" style="left:50%;"></div></div></div>
+      <div class="sval" id="val-3">4 / 7</div>
+    </div>
+    <button class="btn" onclick="saveHooper()">Suivant — Test Stroop <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+
+  <!-- SCREEN 3 — STROOP -->
+  <div id="s3" class="screen">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:13px;font-weight:700;color:var(--cyan);">ENDURAW</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted);">3 / 3</span>
+    </div>
+    <div class="pdots"><div class="pd done"></div><div class="pd done"></div><div class="pd cur"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <div><div class="page-title" style="margin-bottom:2px;">Test cognitif</div><div style="font-size:12px;color:var(--muted);">Appuie sur la couleur de l'encre</div></div>
+      <div style="background:rgba(123,94,167,.15);border:1px solid rgba(123,94,167,.3);border-radius:10px;padding:6px 10px;text-align:center;">
+        <div style="font-size:16px;font-weight:700;color:var(--purple);" id="stroop-correct">0</div>
+        <div style="font-size:9px;color:var(--muted);">/ 10</div>
+      </div>
+    </div>
+    <div class="stroop-card">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Temps écoulé</div>
+      <div class="s-chrono" id="stroop-chrono">00:00</div>
+      <div class="s-word" id="stroop-word">—</div>
+      <div id="stroop-feedback" class="s-feedback" style="display:none;"></div>
+      <div class="s-grid" id="stroop-btns"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+      <span id="stroop-progress">Question 1 / 10</span>
+      <span style="color:var(--cyan);" id="stroop-avg">Moy. : —</span>
+    </div>
+  </div>
+
+  <!-- SCREEN 4 — RECAP -->
+  <div id="s4" class="screen">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:13px;font-weight:700;color:var(--cyan);">ENDURAW</span>
+      </div>
+    </div>
+    <div class="rc-center">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Score du jour</div>
+      <div class="rc-big" id="recap-score">—</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">/100</div>
+      <div class="rc-badge-wrap">
+        <span class="rc-badge" id="recap-badge">—</span>
+        <div class="rc-info-btn" onclick="showScoreDetail()" title="Voir le détail du calcul">i</div>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="mc">
+        <div class="mv" id="recap-hooper">—</div>
+        <div class="ml">Hooper</div>
+      </div>
+      <div class="mc">
+        <div class="mv" id="recap-stroop-correct">—</div>
+        <div class="mv-sub" id="recap-stroop-ms">—</div>
+        <div class="ml">Stroop</div>
+      </div>
+      <div class="mc">
+        <div class="mv" id="recap-vs">—</div>
+        <div class="ml" id="recap-vs-lbl">vs hier</div>
+      </div>
+    </div>
+    <div class="sync-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--cyan);"></div>
+        <span style="font-size:11px;font-weight:600;color:var(--cyan);">Synchronisé avec Enduraw</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">Tes données ont été envoyées à ton <span style="color:var(--cyan);">dashboard Enduraw</span>. Ton profil est mis à jour.</div>
+    </div>
+    <button class="btn" onclick="go('s5')" style="margin-bottom:10px;">Voir mon historique</button>
+    <div class="btn-done">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#00C9E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Check-in terminé pour aujourd'hui
+    </div>
+  </div>
+
+  <!-- SCREEN 5 — DASHBOARD -->
+  <div id="s5" class="screen">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:15px;font-weight:700;color:var(--cyan);">ENDURAW</span>
+      </div>
+      <div class="profil-ico" onclick="go('s6')">TM</div>
+    </div>
+    <div class="page-title" style="margin-bottom:12px;">Mon historique</div>
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchTab('semaine',this)">7 jours</button>
+      <button class="dash-tab" onclick="switchTab('calendrier',this)">Calendrier</button>
+    </div>
+
+    <!-- TAB SEMAINE -->
+    <div id="tab-semaine" class="tab-content active">
+      <div class="sec-label">7 DERNIERS JOURS</div>
+      <div class="bars" id="history-bars"></div>
+      <div class="bdays" id="history-days"></div>
+      <div class="bar-tooltip" id="bar-tooltip"></div>
+      <div class="card">
+        <div class="drow"><div class="dlbl">Hooper moyen (7j)</div><div class="dval" id="avg-hooper">—</div></div>
+        <div class="drow"><div class="dlbl">Stroop moyen (7j)</div><div class="dval" id="avg-stroop">—</div></div>
+        <div class="drow"><div class="dlbl">Ressenti moyen (7j)</div><div class="dval" id="avg-ressenti">—</div></div>
+        <div class="drow"><div class="dlbl">Meilleur score</div><div class="dval" id="dash-best">—</div></div>
+        <div class="drow"><div class="dlbl">Tendance (7j)</div><div class="dval" id="dash-trend">—</div></div>
+      </div>
+    </div>
+
+    <!-- TAB CALENDRIER -->
+    <div id="tab-calendrier" class="tab-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <button onclick="calPrevMonth()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:0 6px;line-height:1;">‹</button>
+        <div style="font-size:13px;font-weight:700;color:var(--text);" id="cal-month-label"></div>
+        <button onclick="calNextMonth()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:0 6px;line-height:1;">›</button>
+      </div>
+      <div class="cal-grid" id="cal-headers"></div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div id="cal-detail" style="display:none;"></div>
+      <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:2px;background:rgba(0,201,224,.15);border:1px solid rgba(0,201,224,.25);"></div><span style="font-size:10px;color:var(--muted);">Check-in rempli</span></div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:2px;background:var(--card2);"></div><span style="font-size:10px;color:var(--muted);">Pas de données</span></div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="go('s0')">Retour accueil</button>
+  </div>
+
+  <!-- SCREEN 6 — PROFIL -->
+  <div id="s6" class="screen">
+    <div class="logo-bar">
+      <div class="logo-wrap" onclick="go('s0')" style="cursor:pointer;">
+        <img src="LOGO_ENDURAW_WHITE.png" height="28" style="object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='block'">
+        <span style="display:none;font-size:15px;font-weight:700;color:var(--cyan);">ENDURAW</span>
+      </div>
+    </div>
+    <div class="profil-avatar">TM</div>
+    <div style="text-align:center;font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px;">Thomas Martin</div>
+    <div style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:20px;">Trail running · Objectif UTMB 2025</div>
+    <div class="card">
+      <div class="prow"><div class="plbl">Check-ins consécutifs</div><div class="pval" style="color:var(--cyan);" id="profil-streak">— 🔥</div></div>
+      <div class="prow"><div class="plbl">Score moyen (7j)</div><div class="pval" id="profil-avg">—</div></div>
+      <div class="prow"><div class="plbl">Meilleur score</div><div class="pval" id="profil-best">—</div></div>
+    </div>
+    <div class="card">
+      <div class="prow"><div class="plbl">Compte Enduraw</div><div class="pval" style="color:var(--cyan);">Connecté</div></div>
+      <div class="prow"><div class="plbl">Données Strava</div><div class="pval" style="color:var(--cyan);">Synchronisé</div></div>
+      <div class="prow"><div class="plbl">Notifications</div><div class="pval">7h00 chaque matin</div></div>
+    </div>
+    <button class="btn-ghost" onclick="go('s0')">Retour accueil</button>
+    <!-- ✅ Bouton reset -->
+    <button class="btn-danger" onclick="resetData()">Réinitialiser les données</button>
+  </div>
+
+  <!-- MODAL DETAIL SCORE -->
+  <div id="modal-score" class="modal-overlay" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Comment est calculé ton score</div>
+      <div id="modal-content"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5;">Le score /100 est un indicateur synthétique Enduraw. Les données brutes sont transmises séparément au dashboard.</div>
+      <button class="btn" style="margin-top:14px;" onclick="document.getElementById('modal-score').style.display='none'">Fermer</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TODAY = new Date().toISOString().slice(0,10);
+function loadState() { try { return JSON.parse(localStorage.getItem('enduraw_state')) || {}; } catch(e) { return {}; } }
+function saveState(s) { localStorage.setItem('enduraw_state', JSON.stringify(s)); }
+let state = loadState();
+if (!state.history) state.history = [];
+if (!state.today || state.today.date !== TODAY) {
+  state.today = { date: TODAY, ressenti: null, hooper: null, stroop: null, mot: '' };
+  saveState(state);
+}
+
+// ✅ Reset complet
+function resetData() {
+  if (!confirm('Réinitialiser toutes les données ? Cette action est irréversible.')) return;
+  localStorage.removeItem('enduraw_state');
+  location.reload();
+}
+
+const BADGES = [
+  { max: 30,  label: 'Repos recommandé' },
+  { max: 50,  label: 'Fatigue modérée'  },
+  { max: 70,  label: 'Forme correcte'   },
+  { max: 85,  label: 'Bonne forme'      },
+  { max: 101, label: 'Top forme'        },
+];
+function getBadge(score) { return BADGES.find(b => score < b.max).label; }
+
+function calcScore(hooperRaw, stroopCorrect, ressenti) {
+  const hooperPts  = Math.round(((28 - hooperRaw) / 24) * 50);
+  const stroopPts  = Math.round((stroopCorrect / 10) * 30);
+  const resentiPts = Math.round(((ressenti - 1) / 4) * 20);
+  return { hooperPts, stroopPts, resentiPts, total: hooperPts + stroopPts + resentiPts };
+}
+
+function getTrend7j() {
+  const scores = state.history.slice(-7).map(h => h.score);
+  if (scores.length < 2) return null;
+  const diff = scores[scores.length - 1] - scores[scores.length - 2];
+  if (diff > 4)  return { text: '↗ Continue comme ça', cls: 'up',   color: 'var(--green)'  };
+  if (diff < -4) return { text: '↘ Pense à récupérer', cls: 'down', color: 'var(--orange)' };
+  return           { text: '→ Stable',              cls: 'same', color: 'var(--cyan)'   };
+}
+
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('modal-score').style.display = 'none';
+  if (id === 's0') renderAccueil();
+  if (id === 's3') startStroop();
+  if (id === 's4') renderRecap();
+  if (id === 's5') renderDashboard();
+  if (id === 's6') renderProfil();
+}
+
+// ── ACCUEIL ──
+function renderAccueil() {
+  renderYesterday();
+  renderWeekDots();
+  renderProgressStrip();
+  renderCTA();
+  renderStreak();
+  renderHomeStats();
+}
+
+function renderYesterday() {
+  const y = state.history[state.history.length - 1];
+  if (y) {
+    document.getElementById('yesterday-score').textContent  = y.score;
+    document.getElementById('yesterday-label').textContent  = getBadge(y.score);
+    const sc = y.stroopCorrect !== undefined ? y.stroopCorrect : '?';
+    const ms = y.stroopMs !== undefined ? y.stroopMs : '?';
+    document.getElementById('yesterday-detail').textContent = 'Hooper ' + y.hooper + '/28 · Stroop ' + sc + '/10 · ' + ms + 'ms';
+    const circ = 2 * Math.PI * 24;
+    const dash = Math.round((y.score / 100) * circ);
+    document.getElementById('yesterday-ring').setAttribute('stroke-dasharray', dash + ' ' + (circ - dash));
+  } else {
+    document.getElementById('yesterday-score').textContent  = '—';
+    document.getElementById('yesterday-label').textContent  = 'Premier check-in';
+    document.getElementById('yesterday-detail').textContent = 'Complète ton premier check-in';
+    document.getElementById('yesterday-ring').setAttribute('stroke-dasharray', '0 150');
+  }
+}
+
+function renderHomeStats() {
+  const scores = state.history.map(h => h.score);
+  if (scores.length) {
+    const last7 = scores.slice(-7);
+    const avg  = Math.round(last7.reduce((a,b) => a+b, 0) / last7.length);
+    const best = Math.max(...scores);
+    document.getElementById('stats-avg').textContent  = avg;
+    document.getElementById('stats-best').textContent = best;
+    document.getElementById('stats-best-day').textContent = 'Record 🏆';
+    const trend = getTrend7j();
+    const tEl = document.getElementById('stats-avg-trend');
+    if (trend) { tEl.textContent = trend.text; tEl.className = 'stat-trend ' + trend.cls; }
+    else        { tEl.textContent = '—'; tEl.className = 'stat-trend same'; }
+  } else {
+    ['stats-avg','stats-best'].forEach(id => document.getElementById(id).textContent = '—');
+    document.getElementById('stats-avg-trend').textContent = '—';
+    document.getElementById('stats-best-day').textContent  = '—';
+  }
+}
+function getDayDate(dayOfWeek) {
+  const now = new Date();
+  const today = now.getDay(); // 0 (Dim) à 6 (Sam)
+  const dayAdjusted = today === 0 ? 7 : today; // Lundi=1 ... Dimanche=7
+  const targetAdjusted = dayOfWeek === 0 ? 7 : dayOfWeek; 
+  
+  const diff = targetAdjusted - dayAdjusted;
+  const d = new Date(now);
+  d.setDate(now.getDate() + diff);
+  return d.toISOString().slice(0,10);
+}
+
+// Modifie légèrement renderWeekDots pour utiliser la nouvelle fonction
+function renderWeekDots() {
+  const ordre = [1,2,3,4,5,6,0]; 
+  const lettres = ['L','M','M','J','V','S','D'];
+  const today = new Date().getDay();
+  const dotsEl = document.getElementById('week-dots'); 
+  dotsEl.innerHTML = '';
+  
+  ordre.forEach((jour, i) => {
+    const isToday = jour === today;
+    const targetDate = getDayDate(jour); 
+    const entry = state.history.find(h => h.date === targetDate);
+    
+    const dc = document.createElement('div'); dc.className = 'dc';
+    const dl = document.createElement('div'); dl.className = 'dl'; dl.textContent = lettres[i];
+    const dd = document.createElement('div');
+    
+    if (isToday) {
+      const done = state.today.ressenti && state.today.hooper && state.today.stroop;
+      if (done) {
+        dd.className = 'dd dd-done';
+        dd.style.background = 'rgba(255,95,31,.2)'; 
+        dd.style.border = '1px solid rgba(255,95,31,.4)'; 
+        dd.style.color = 'var(--orange)';
+        dd.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="#FF5F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      } else { 
+        dd.className = 'dd dd-today'; 
+        dd.innerHTML = '<div class="today-dot"></div>'; 
+      }
+    } else if (entry) { 
+      dd.className = 'dd dd-done'; 
+      dd.textContent = entry.score; 
+    } else { 
+      dd.className = 'dd dd-empty'; 
+      dd.textContent = '—'; 
+    }
+    dc.appendChild(dl); dc.appendChild(dd); dotsEl.appendChild(dc);
+  });
+}
+
+function renderProgressStrip() {
+  const steps = [
+    { key:'ressenti', label:'Ressenti' }, { key:'hooper', label:'Hooper' },
+    { key:'stroop',   label:'Stroop'   }, { key:'recap',  label:'Récap'  },
+  ];
+  const isRecapDone = state.today.ressenti && state.today.hooper && state.today.stroop;
+  const el = document.getElementById('progress-steps'); el.innerHTML = '';
+  steps.forEach((step, i) => {
+    const isDone   = step.key === 'recap' ? isRecapDone : !!state.today[step.key];
+    const isActive = !isDone && steps.slice(0,i).every(s => s.key === 'recap' ? isRecapDone : !!state.today[s.key]);
+    const div = document.createElement('div'); div.className = 'ps-step' + (isDone?' done':isActive?' active':'');
+    const circle = document.createElement('div'); circle.className = 'ps-circle ' + (isDone?'done':isActive?'active':'locked');
+    if (isDone) circle.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#00C9E0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    else if (isActive) circle.innerHTML = `<svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="2.5" fill="white"/></svg>`;
+    else circle.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="5" width="6" height="4" rx="1" stroke="#6B7A99" stroke-width="1"/><path d="M3.5 5V4a1.5 1.5 0 013 0v1" stroke="#6B7A99" stroke-width="1" stroke-linecap="round"/></svg>`;
+    const name = document.createElement('div'); name.className = 'ps-name ' + (isDone?'done':isActive?'active':''); name.textContent = step.label;
+    div.appendChild(circle); div.appendChild(name); el.appendChild(div);
+  });
+}
+
+function renderCTA() {
+  const cta = document.getElementById('main-cta');
+  const arrow = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const allDone = state.today.ressenti && state.today.hooper && state.today.stroop;
+  if (allDone) { cta.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Check-in complété · Voir le récap`; cta.onclick = () => go('s4'); }
+  else if (!state.today.ressenti) { cta.innerHTML = `Commencer le check-in ${arrow}`; cta.onclick = () => go('s1'); }
+  else if (!state.today.hooper)   { cta.innerHTML = `Continuer — Hooper ${arrow}`; cta.onclick = () => go('s2'); }
+  else                             { cta.innerHTML = `Continuer — Stroop ${arrow}`; cta.onclick = () => go('s3'); }
+}
+function handleCTA() {}
+
+function calcStreak() {
+  let streak = 0; const d = new Date();
+  const todayDone = state.today.ressenti && state.today.hooper && state.today.stroop;
+  if (!todayDone) d.setDate(d.getDate() - 1);
+  while (true) {
+    const dateStr = d.toISOString().slice(0,10);
+    if (state.history.find(h => h.date === dateStr)) { streak++; d.setDate(d.getDate() - 1); } else break;
+  }
+  return streak;
+}
+function renderStreak() { document.getElementById('streak-val').textContent = calcStreak(); }
+
+// ── RESSENTI ──
+let selectedFeel = 3;
+function selFeel(el) {
+  document.querySelectorAll('.feel-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedFeel = parseInt(el.dataset.val);
+}
+function saveRessenti() {
+  state.today.ressenti = selectedFeel;
+  state.today.mot = document.getElementById('ressenti-mot').value;
+  saveState(state); go('s2');
+}
+
+// ── HOOPER ──
+let hooperVals = [4,4,4,4];
+function setSlider(idx, event) {
+  const track = document.getElementById('track-' + idx);
+  const rect  = track.getBoundingClientRect();
+  const x     = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+  const val   = Math.round((x / rect.width) * 6) + 1;
+  hooperVals[idx] = val; updateSliderUI(idx);
+}
+function updateSliderUI(idx) {
+  const pct = (hooperVals[idx] - 1) / 6;
+  document.getElementById('fill-' + idx).style.width = (pct * 100) + '%';
+  document.getElementById('thumb-' + idx).style.left  = (pct * 100) + '%';
+  document.getElementById('val-' + idx).textContent   = hooperVals[idx] + ' / 7';
+}
+function saveHooper() {
+  const total = hooperVals.reduce((a,b) => a + (8 - b), 0);
+  state.today.hooper = total; saveState(state); go('s3');
+}
+
+// ── STROOP ──
+const COLORS = [{ name:'Rouge', ink:'#e74c3c' },{ name:'Bleu', ink:'#2980b9' },{ name:'Vert', ink:'#27ae60' },{ name:'Jaune', ink:'#f1c40f' }];
+let stroopData = {};
+function startStroop() {
+  stroopData = { q:0, correct:0, times:[], startTime:Date.now(), qStart:Date.now(), timerInterval:null };
+  document.getElementById('stroop-correct').textContent = '0';
+  document.getElementById('stroop-feedback').style.display = 'none';
+  clearInterval(stroopData.timerInterval);
+  stroopData.timerInterval = setInterval(updateChrono, 100);
+  nextQuestion();
+}
+function updateChrono() {
+  const e = Math.floor((Date.now() - stroopData.startTime) / 1000);
+  document.getElementById('stroop-chrono').textContent = String(Math.floor(e/60)).padStart(2,'0') + ':' + String(e%60).padStart(2,'0');
+}
+function nextQuestion() {
+  if (stroopData.q >= 10) { finishStroop(); return; }
+  const wc = COLORS[Math.floor(Math.random()*COLORS.length)];
+  const ic = COLORS[Math.floor(Math.random()*COLORS.length)];
+  document.getElementById('stroop-word').textContent = wc.name.toUpperCase();
+  document.getElementById('stroop-word').style.color = ic.ink;
+  document.getElementById('stroop-progress').textContent = 'Question ' + (stroopData.q+1) + ' / 10';
+  document.getElementById('stroop-feedback').style.display = 'none';
+  const btns = document.getElementById('stroop-btns'); btns.innerHTML = '';
+  [...COLORS].sort(() => Math.random()-.5).forEach(c => {
+    const b = document.createElement('button'); b.className = 'scb'; b.style.background = c.ink; b.textContent = c.name;
+    b.onclick = () => answerStroop(c.name === ic.name); btns.appendChild(b);
+  });
+  stroopData.qStart = Date.now();
+}
+function answerStroop(correct) {
+  const rt = Date.now() - stroopData.qStart; stroopData.times.push(rt);
+  if (correct) stroopData.correct++;
+  document.getElementById('stroop-correct').textContent = stroopData.correct;
+  const fb = document.getElementById('stroop-feedback');
+  fb.className = 's-feedback ' + (correct ? 'correct' : 'wrong');
+  fb.textContent = correct ? '✓ Correct — ' + rt + 'ms' : '✗ Raté'; fb.style.display = 'block';
+  const avg = Math.round(stroopData.times.reduce((a,b)=>a+b,0)/stroopData.times.length);
+  document.getElementById('stroop-avg').textContent = 'Moy. : ' + avg + 'ms';
+  document.querySelectorAll('#stroop-btns .scb').forEach(b => b.onclick = null);
+  stroopData.q++; setTimeout(nextQuestion, 600);
+}
+function finishStroop() {
+  clearInterval(stroopData.timerInterval);
+  const avg = Math.round(stroopData.times.reduce((a,b)=>a+b,0)/stroopData.times.length);
+  state.today.stroop = { correct: stroopData.correct, avgMs: avg };
+  saveState(state); go('s4');
+}
+
+// ── RECAP ──
+function renderRecap() {
+  const h = state.today.hooper;
+  const s = state.today.stroop;
+  const r = state.today.ressenti;
+  if (!h || !s || !r) return;
+
+  const { hooperPts, stroopPts, resentiPts, total } = calcScore(h, s.correct, r);
+  document.getElementById('recap-score').textContent = total;
+  document.getElementById('recap-badge').textContent = getBadge(total);
+  document.getElementById('recap-hooper').textContent = h + ' / 28';
+  document.getElementById('recap-stroop-correct').textContent = s.correct + ' / 10';
+  document.getElementById('recap-stroop-ms').textContent = s.avgMs + ' ms';
+
+  const y = state.history[state.history.length - 1];
+  const vsEl  = document.getElementById('recap-vs');
+  const vsLbl = document.getElementById('recap-vs-lbl');
+  if (y) {
+    const diff = total - y.score;
+    vsEl.textContent = (diff >= 0 ? '+' : '') + diff + ' pts';
+    vsEl.style.color = diff >= 0 ? 'var(--green)' : 'var(--orange)';
+    vsLbl.textContent = 'vs hier';
+  } else {
+    vsEl.textContent  = '1er jour'; vsEl.style.color = 'var(--cyan)'; vsLbl.textContent = '';
+  }
+
+  // ✅ FIX PRINCIPAL : stockage cohérent avec stroopCorrect + stroopMs
+  if (!state.history.find(e => e.date === TODAY)) {
+    state.history.push({
+      date: TODAY,
+      score: total,
+      hooper: h,
+      stroopCorrect: s.correct,   // ← était absent dans ton code actuel
+      stroopMs: s.avgMs,          // ← était stocké comme "stroop: s.avgMs"
+      ressenti: r,
+      mot: state.today.mot || ''
+    });
+    saveState(state);
+  }
+}
+
+function showScoreDetail() {
+  const h = state.today.hooper; const s = state.today.stroop; const r = state.today.ressenti;
+  if (!h || !s || !r) return;
+  const { hooperPts, stroopPts, resentiPts, total } = calcScore(h, s.correct, r);
+  document.getElementById('modal-content').innerHTML = `
+    <div class="calc-row"><span class="calc-lbl">Hooper (récupération) — 50%</span><span class="calc-pts">${hooperPts} / 50 pts</span></div>
+    <div class="calc-row"><span class="calc-lbl">Stroop (concentration) — 30%</span><span class="calc-pts">${stroopPts} / 30 pts</span></div>
+    <div class="calc-row"><span class="calc-lbl">Ressenti — 20%</span><span class="calc-pts">${resentiPts} / 20 pts</span></div>
+    <div class="calc-total-row"><span class="calc-total-lbl">Score total</span><span class="calc-total-val">${total} / 100</span></div>
+  `;
+  document.getElementById('modal-score').style.display = 'flex';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-score')) document.getElementById('modal-score').style.display = 'none';
+}
+
+// ── DASHBOARD ──
+function switchTab(tab, el) {
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'calendrier') renderCalendar();
+}
+
+function renderDashboard() {
+  const ordre = [1,2,3,4,5,6,0]; const lettres = ['L','M','M','J','V','S','D'];
+  const today = new Date().getDay();
+  const last7 = ordre.map(dow => state.history.find(h => h.date === getDayDate(dow)) || null);
+  const barsEl = document.getElementById('history-bars'); const daysEl = document.getElementById('history-days');
+  barsEl.innerHTML = ''; daysEl.innerHTML = '';
+  const tooltip = document.getElementById('bar-tooltip');
+  tooltip.innerHTML = ''; tooltip.classList.remove('visible');
+
+  const maxScore = Math.max(...last7.map(d => d ? d.score : 0), 1);
+  last7.forEach((entry, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar' + (ordre[i] === today ? ' hi' : '');
+    bar.style.height = entry ? Math.round((entry.score / maxScore) * 100) + '%' : '8%';
+    bar.onclick = () => showBarDetail(entry, lettres[i]);
+    barsEl.appendChild(bar);
+    const day = document.createElement('div');
+    day.className = 'bd' + (ordre[i] === today ? ' t' : '');
+    day.textContent = lettres[i]; daysEl.appendChild(day);
+  });
+
+  const entries = last7.filter(Boolean);
+  if (entries.length) {
+    const avgH   = Math.round(entries.reduce((a,b) => a + b.hooper, 0) / entries.length);
+    const avgSMs = Math.round(entries.reduce((a,b) => a + (b.stroopMs || 0), 0) / entries.length);
+    const avgSC  = (entries.reduce((a,b) => a + (b.stroopCorrect || 0), 0) / entries.length).toFixed(1);
+    const avgR   = (entries.reduce((a,b) => a + b.ressenti, 0) / entries.length).toFixed(1);
+    const best   = Math.max(...entries.map(e => e.score));
+    document.getElementById('avg-hooper').textContent   = avgH + ' / 28';
+    document.getElementById('avg-stroop').textContent   = avgSC + '/10 · ' + avgSMs + 'ms';
+    document.getElementById('avg-ressenti').textContent = avgR + ' / 5';
+    document.getElementById('dash-best').textContent    = best + ' / 100';
+    const trend = getTrend7j();
+    const tEl   = document.getElementById('dash-trend');
+    if (trend) { tEl.textContent = trend.text; tEl.style.color = trend.color; }
+    else        { tEl.textContent = '—'; tEl.style.color = 'var(--muted)'; }
+  } else {
+    ['avg-hooper','avg-stroop','avg-ressenti','dash-best'].forEach(id => document.getElementById(id).textContent = '—');
+    document.getElementById('dash-trend').textContent = '—';
+  }
+}
+
+function showBarDetail(entry, jour) {
+  const tooltip = document.getElementById('bar-tooltip');
+  if (!entry) {
+    tooltip.innerHTML = '<span style="font-size:11px;color:var(--muted);">Pas de données pour ce jour.</span>';
+  } else {
+    const motTxt = entry.mot ? ` · "${entry.mot}"` : '';
+    const sc = entry.stroopCorrect !== undefined ? entry.stroopCorrect : '?';
+    const ms = entry.stroopMs !== undefined ? entry.stroopMs : '?';
+    tooltip.innerHTML = `
+      <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">${jour} · Score ${entry.score}/100 — ${getBadge(entry.score)}</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:var(--text);">Hooper <strong style="color:var(--cyan);">${entry.hooper}/28</strong></span>
+        <span style="font-size:11px;color:var(--text);">Stroop <strong style="color:var(--cyan);">${sc}/10 · ${ms}ms</strong></span>
+        <span style="font-size:11px;color:var(--text);">Ressenti <strong style="color:var(--cyan);">${entry.ressenti}/5${motTxt}</strong></span>
+      </div>
+    `;
+  }
+  tooltip.classList.add('visible');
+}
+
+// ── CALENDRIER ──
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const JOURS_COURTS = ['L','M','M','J','V','S','D'];
+
+function renderCalendar() {
+  document.getElementById('cal-month-label').textContent = MOIS[calMonth] + ' ' + calYear;
+  const headersEl = document.getElementById('cal-headers'); headersEl.innerHTML = '';
+  JOURS_COURTS.forEach(j => { const d = document.createElement('div'); d.className = 'cal-header'; d.textContent = j; headersEl.appendChild(d); });
+  const gridEl = document.getElementById('cal-grid'); gridEl.innerHTML = '';
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const offset   = firstDay === 0 ? 6 : firstDay - 1;
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const todayFull   = new Date().toISOString().slice(0,10);
+  for (let i = 0; i < offset; i++) {
+    const e = document.createElement('div'); e.className = 'cal-day empty'; gridEl.appendChild(e);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = calYear + '-' + String(calMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const entry   = state.history.find(h => h.date === dateStr);
+    const isToday = dateStr === todayFull;
+    const isDoneToday = isToday && state.today.ressenti && state.today.hooper && state.today.stroop;
+    const cell = document.createElement('div');
+    if (isDoneToday)    cell.className = 'cal-day done-today';
+    else if (entry)     cell.className = 'cal-day has-data' + (isToday ? ' is-today' : '');
+    else                cell.className = 'cal-day no-data'  + (isToday ? ' is-today' : '');
+    cell.textContent = d;
+    if (entry || isDoneToday) {
+      const e2 = entry || {
+        date: todayFull,
+        score: calcScore(state.today.hooper, state.today.stroop.correct, state.today.ressenti).total,
+        hooper: state.today.hooper,
+        stroopCorrect: state.today.stroop.correct,
+        stroopMs: state.today.stroop.avgMs,
+        ressenti: state.today.ressenti, mot: state.today.mot
+      };
+      cell.onclick = () => showCalDetail(e2);
+    }
+    gridEl.appendChild(cell);
+  }
+  document.getElementById('cal-detail').style.display = 'none';
+}
+
+function showCalDetail(entry) {
+  if (!entry) return;
+  const d = new Date(entry.date + 'T00:00:00');
+  const label = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+  const sc = entry.stroopCorrect !== undefined ? entry.stroopCorrect : '?';
+  const ms = entry.stroopMs !== undefined ? entry.stroopMs : '?';
+  const motTxt = entry.mot ? `<div class="cal-row"><span class="cal-lbl">Mot du jour</span><span class="cal-val">"${entry.mot}"</span></div>` : '';
+  const el = document.getElementById('cal-detail');
+  el.innerHTML = `
+    <div class="cal-detail">
+      <div class="cal-detail-title">${label} · Score ${entry.score}/100</div>
+      <div class="cal-row"><span class="cal-lbl">Hooper</span><span class="cal-val">${entry.hooper} / 28</span></div>
+      <div class="cal-row"><span class="cal-lbl">Stroop</span><span class="cal-val">${sc}/10 · ${ms}ms</span></div>
+      <div class="cal-row"><span class="cal-lbl">Ressenti</span><span class="cal-val">${entry.ressenti} / 5</span></div>
+      ${motTxt}
+    </div>
+  `;
+  el.style.display = 'block';
+}
+
+function calPrevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function calNextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+
+// ── PROFIL ──
+function renderProfil() {
+  const streak = calcStreak();
+  document.getElementById('profil-streak').textContent = streak + ' jour' + (streak > 1 ? 's' : '') + ' 🔥';
+  const scores = state.history.map(h => h.score);
+  if (scores.length) {
+    const avg  = Math.round(scores.slice(-7).reduce((a,b) => a+b, 0) / Math.min(scores.length, 7));
+    const best = Math.max(...scores);
+    document.getElementById('profil-avg').textContent  = avg + ' / 100';
+    document.getElementById('profil-best').textContent = best + ' / 100';
+  } else {
+    document.getElementById('profil-avg').textContent  = '—';
+    document.getElementById('profil-best').textContent = '—';
+  }
+}
+
+renderAccueil();
+</script>
+</body>
+</html>
