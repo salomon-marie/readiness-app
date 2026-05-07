@@ -465,18 +465,16 @@ html, body { height: 100%; background: var(--bg); font-family: 'Space Grotesk', 
     <div class="profil-avatar">TM</div>
     <div style="text-align:center;font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px;">Thomas Martin</div>
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:20px;">Trail running · Objectif UTMB 2025</div>
+
     <div class="card">
-      <div class="prow"><div class="plbl">Check-ins consécutifs</div><div class="pval" style="color:var(--cyan);" id="profil-streak">— 🔥</div></div>
-      <div class="prow"><div class="plbl">Score moyen (7j)</div><div class="pval" id="profil-avg">—</div></div>
-      <div class="prow"><div class="plbl">Meilleur score</div><div class="pval" id="profil-best">—</div></div>
-    </div>
-    <div class="card">
+      <div class="sec-label" style="margin-bottom:8px;">MON COMPTE</div>
       <div class="prow"><div class="plbl">Compte Enduraw</div><div class="pval" style="color:var(--cyan);">Connecté</div></div>
       <div class="prow"><div class="plbl">Données Strava</div><div class="pval" style="color:var(--cyan);">Synchronisé</div></div>
       <div class="prow"><div class="plbl">Notifications</div><div class="pval">7h00 chaque matin</div></div>
+      <div class="prow"><div class="plbl">Check-ins consécutifs</div><div class="pval" style="color:var(--cyan);" id="profil-streak">— 🔥</div></div>
     </div>
+
     <button class="btn-ghost" onclick="go('s0')">Retour accueil</button>
-    <!-- ✅ Bouton reset -->
     <button class="btn-danger" onclick="resetData()">Réinitialiser les données</button>
   </div>
 
@@ -595,54 +593,32 @@ function renderHomeStats() {
     document.getElementById('stats-best-day').textContent  = '—';
   }
 }
+
 function getDayDate(dayOfWeek) {
-  const now = new Date();
-  const today = now.getDay(); // 0 (Dim) à 6 (Sam)
-  const dayAdjusted = today === 0 ? 7 : today; // Lundi=1 ... Dimanche=7
-  const targetAdjusted = dayOfWeek === 0 ? 7 : dayOfWeek; 
-  
-  const diff = targetAdjusted - dayAdjusted;
-  const d = new Date(now);
-  d.setDate(now.getDate() + diff);
+  const now = new Date(); const diff = dayOfWeek - now.getDay();
+  const d = new Date(now); d.setDate(now.getDate() + diff);
   return d.toISOString().slice(0,10);
 }
 
-// Modifie légèrement renderWeekDots pour utiliser la nouvelle fonction
 function renderWeekDots() {
-  const ordre = [1,2,3,4,5,6,0]; 
-  const lettres = ['L','M','M','J','V','S','D'];
+  const ordre = [1,2,3,4,5,6,0]; const lettres = ['L','M','M','J','V','S','D'];
   const today = new Date().getDay();
-  const dotsEl = document.getElementById('week-dots'); 
-  dotsEl.innerHTML = '';
-  
+  const dotsEl = document.getElementById('week-dots'); dotsEl.innerHTML = '';
   ordre.forEach((jour, i) => {
     const isToday = jour === today;
-    const targetDate = getDayDate(jour); 
-    const entry = state.history.find(h => h.date === targetDate);
-    
+    const entry   = state.history.find(h => h.date === getDayDate(jour));
     const dc = document.createElement('div'); dc.className = 'dc';
     const dl = document.createElement('div'); dl.className = 'dl'; dl.textContent = lettres[i];
     const dd = document.createElement('div');
-    
     if (isToday) {
       const done = state.today.ressenti && state.today.hooper && state.today.stroop;
       if (done) {
         dd.className = 'dd dd-done';
-        dd.style.background = 'rgba(255,95,31,.2)'; 
-        dd.style.border = '1px solid rgba(255,95,31,.4)'; 
-        dd.style.color = 'var(--orange)';
+        dd.style.background = 'rgba(255,95,31,.2)'; dd.style.border = '1px solid rgba(255,95,31,.4)'; dd.style.color = 'var(--orange)';
         dd.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="#FF5F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-      } else { 
-        dd.className = 'dd dd-today'; 
-        dd.innerHTML = '<div class="today-dot"></div>'; 
-      }
-    } else if (entry) { 
-      dd.className = 'dd dd-done'; 
-      dd.textContent = entry.score; 
-    } else { 
-      dd.className = 'dd dd-empty'; 
-      dd.textContent = '—'; 
-    }
+      } else { dd.className = 'dd dd-today'; dd.innerHTML = '<div class="today-dot"></div>'; }
+    } else if (entry) { dd.className = 'dd dd-done'; dd.textContent = entry.score; }
+    else { dd.className = 'dd dd-empty'; dd.textContent = '—'; }
     dc.appendChild(dl); dc.appendChild(dd); dotsEl.appendChild(dc);
   });
 }
@@ -971,16 +947,6 @@ function calNextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear
 function renderProfil() {
   const streak = calcStreak();
   document.getElementById('profil-streak').textContent = streak + ' jour' + (streak > 1 ? 's' : '') + ' 🔥';
-  const scores = state.history.map(h => h.score);
-  if (scores.length) {
-    const avg  = Math.round(scores.slice(-7).reduce((a,b) => a+b, 0) / Math.min(scores.length, 7));
-    const best = Math.max(...scores);
-    document.getElementById('profil-avg').textContent  = avg + ' / 100';
-    document.getElementById('profil-best').textContent = best + ' / 100';
-  } else {
-    document.getElementById('profil-avg').textContent  = '—';
-    document.getElementById('profil-best').textContent = '—';
-  }
 }
 
 renderAccueil();
