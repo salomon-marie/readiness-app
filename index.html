@@ -229,7 +229,7 @@ html, body { height: 100%; background: var(--bg); font-family: 'Space Grotesk', 
         <div class="ynum" id="yesterday-score">—</div>
       </div>
       <div class="yi">
-        <div class="yl">Score d'hier</div>
+        <div class="yl">Dernier score</div>
         <div class="yv" id="yesterday-label">—</div>
         <div class="yd" id="yesterday-detail">Complète ton premier check-in</div>
       </div>
@@ -305,25 +305,25 @@ html, body { height: 100%; background: var(--bg); font-family: 'Space Grotesk', 
     <div class="qcard">
       <div class="qlabel">Qualité du sommeil</div>
       <div class="sends"><span>Très mauvaise</span><span>Excellente</span></div>
-      <div class="slider-wrap"><div class="slider-track" id="track-0" onclick="setSlider(0,event)"><div class="slider-fill" id="fill-0" style="width:50%;"></div><div class="slider-thumb" id="thumb-0" style="left:50%;"></div></div></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-0"><div class="slider-fill" id="fill-0" style="width:50%;"></div><div class="slider-thumb" id="thumb-0" style="left:50%;"></div></div></div>
       <div class="sval" id="val-0">4 / 7</div>
     </div>
     <div class="qcard">
       <div class="qlabel">Niveau de fatigue</div>
       <div class="sends"><span>Très fatigué</span><span>Plein d'énergie</span></div>
-      <div class="slider-wrap"><div class="slider-track" id="track-1" onclick="setSlider(1,event)"><div class="slider-fill" id="fill-1" style="width:50%;"></div><div class="slider-thumb" id="thumb-1" style="left:50%;"></div></div></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-1"><div class="slider-fill" id="fill-1" style="width:50%;"></div><div class="slider-thumb" id="thumb-1" style="left:50%;"></div></div></div>
       <div class="sval" id="val-1">4 / 7</div>
     </div>
     <div class="qcard">
       <div class="qlabel">Niveau de stress</div>
       <div class="sends"><span>Très stressé</span><span>Très serein</span></div>
-      <div class="slider-wrap"><div class="slider-track" id="track-2" onclick="setSlider(2,event)"><div class="slider-fill" id="fill-2" style="width:50%;"></div><div class="slider-thumb" id="thumb-2" style="left:50%;"></div></div></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-2"><div class="slider-fill" id="fill-2" style="width:50%;"></div><div class="slider-thumb" id="thumb-2" style="left:50%;"></div></div></div>
       <div class="sval" id="val-2">4 / 7</div>
     </div>
     <div class="qcard">
       <div class="qlabel">Douleurs musculaires</div>
       <div class="sends"><span>Très douloureuses</span><span>Aucune douleur</span></div>
-      <div class="slider-wrap"><div class="slider-track" id="track-3" onclick="setSlider(3,event)"><div class="slider-fill" id="fill-3" style="width:50%;"></div><div class="slider-thumb" id="thumb-3" style="left:50%;"></div></div></div>
+      <div class="slider-wrap"><div class="slider-track" id="track-3"><div class="slider-fill" id="fill-3" style="width:50%;"></div><div class="slider-thumb" id="thumb-3" style="left:50%;"></div></div></div>
       <div class="sval" id="val-3">4 / 7</div>
     </div>
     <button class="btn" onclick="saveHooper()">Suivant — Test Stroop <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -346,6 +346,20 @@ html, body { height: 100%; background: var(--bg); font-family: 'Space Grotesk', 
         <div style="font-size:9px;color:var(--muted);">/ 10</div>
       </div>
     </div>
+    <!-- Écran prêt — affiché avant le début du test -->
+    <div id="stroop-ready" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;">
+      <div style="font-size:48px;">🧠</div>
+      <div style="font-size:17px;font-weight:700;color:var(--text);">Test cognitif</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;max-width:260px;">Tu vas voir un mot écrit dans une couleur.<br>Appuie sur la <strong style="color:var(--text);">couleur de l'encre</strong>, pas sur ce qui est écrit.</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;font-size:12px;color:var(--muted);">10 questions · Réponds le plus vite possible</div>
+      <button class="btn" style="margin-top:8px;" onclick="launchStroop()">
+        Je suis prêt
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Test en cours — caché jusqu'au clic -->
+    <div id="stroop-game" style="display:none;">
     <div class="stroop-card">
       <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Temps écoulé</div>
       <div class="s-chrono" id="stroop-chrono">00:00</div>
@@ -356,6 +370,7 @@ html, body { height: 100%; background: var(--bg); font-family: 'Space Grotesk', 
     <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
       <span id="stroop-progress">Question 1 / 10</span>
       <span style="color:var(--cyan);" id="stroop-avg">Moy. : —</span>
+    </div>
     </div>
   </div>
 
@@ -556,7 +571,8 @@ function renderAccueil() {
 }
 
 function renderYesterday() {
-  const y = state.history[state.history.length - 1];
+  // Cherche la dernière entrée qui n'est PAS aujourd'hui
+  const y = state.history.slice().reverse().find(h => h.date !== TODAY);
   if (y) {
     document.getElementById('yesterday-score').textContent  = y.score;
     document.getElementById('yesterday-label').textContent  = getBadge(y.score);
@@ -567,9 +583,10 @@ function renderYesterday() {
     const dash = Math.round((y.score / 100) * circ);
     document.getElementById('yesterday-ring').setAttribute('stroke-dasharray', dash + ' ' + (circ - dash));
   } else {
+    // Premier jour : rien à afficher
     document.getElementById('yesterday-score').textContent  = '—';
-    document.getElementById('yesterday-label').textContent  = 'Premier check-in';
-    document.getElementById('yesterday-detail').textContent = 'Complète ton premier check-in';
+    document.getElementById('yesterday-label').textContent  = 'Pas encore de données';
+    document.getElementById('yesterday-detail').textContent = 'Reviens demain après ton check-in';
     document.getElementById('yesterday-ring').setAttribute('stroke-dasharray', '0 150');
   }
 }
@@ -681,19 +698,72 @@ function saveRessenti() {
 
 // ── HOOPER ──
 let hooperVals = [4,4,4,4];
-function setSlider(idx, event) {
-  const track = document.getElementById('track-' + idx);
-  const rect  = track.getBoundingClientRect();
-  const x     = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
-  const val   = Math.round((x / rect.width) * 6) + 1;
-  hooperVals[idx] = val; updateSliderUI(idx);
+// ── SLIDERS HOOPER — drag fluide avec snap sur 7 positions ──
+function getValFromX(track, clientX) {
+  const rect = track.getBoundingClientRect();
+  const x    = Math.max(0, Math.min(clientX - rect.left, rect.width));
+  return Math.round((x / rect.width) * 6) + 1;
 }
 function updateSliderUI(idx) {
   const pct = (hooperVals[idx] - 1) / 6;
-  document.getElementById('fill-' + idx).style.width = (pct * 100) + '%';
+  document.getElementById('fill-'  + idx).style.width = (pct * 100) + '%';
   document.getElementById('thumb-' + idx).style.left  = (pct * 100) + '%';
-  document.getElementById('val-' + idx).textContent   = hooperVals[idx] + ' / 7';
+  document.getElementById('val-'   + idx).textContent = hooperVals[idx] + ' / 7';
 }
+function setSlider(idx, clientX) {
+  hooperVals[idx] = getValFromX(document.getElementById('track-' + idx), clientX);
+  updateSliderUI(idx);
+}
+function initSliders() {
+  for (let i = 0; i < 4; i++) {
+    (function(idx) {
+      const track = document.getElementById('track-' + idx);
+      const thumb = document.getElementById('thumb-' + idx);
+      let dragging = false;
+
+      // Supprime la transition pendant le drag pour la fluidité
+      function startDrag(clientX) {
+        dragging = true;
+        thumb.style.transition = 'none';
+        setSlider(idx, clientX);
+      }
+      function moveDrag(clientX) {
+        if (!dragging) return;
+        // Mise à jour fluide sans snap pendant le mouvement
+        const rect = track.getBoundingClientRect();
+        const x    = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        const pct  = x / rect.width;
+        document.getElementById('fill-'  + idx).style.width = (pct * 100) + '%';
+        document.getElementById('thumb-' + idx).style.left  = (pct * 100) + '%';
+        // Calcul valeur en live pour affichage
+        const liveVal = Math.round(pct * 6) + 1;
+        document.getElementById('val-' + idx).textContent = liveVal + ' / 7';
+      }
+      function endDrag(clientX) {
+        if (!dragging) return;
+        dragging = false;
+        // Snap à la position finale + transition de retour
+        thumb.style.transition = 'left .1s ease';
+        setSlider(idx, clientX);
+      }
+
+      // Mouse
+      track.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX); });
+      document.addEventListener('mousemove', e => { if (dragging) moveDrag(e.clientX); });
+      document.addEventListener('mouseup',   e => { if (dragging) endDrag(e.clientX); });
+
+      // Touch
+      track.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientX); }, { passive: false });
+      document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); moveDrag(e.touches[0].clientX); } }, { passive: false });
+      document.addEventListener('touchend',  e => { if (dragging) endDrag(e.changedTouches[0].clientX); });
+
+      // Click simple (tap)
+      track.addEventListener('click', e => { thumb.style.transition = 'left .1s ease'; setSlider(idx, e.clientX); });
+    })(i);
+  }
+}
+// Init au chargement
+initSliders();
 function saveHooper() {
   const total = hooperVals.reduce((a,b) => a + (8 - b), 0);
   state.today.hooper = total; saveState(state); go('s3');
@@ -703,8 +773,17 @@ function saveHooper() {
 const COLORS = [{ name:'Rouge', ink:'#e74c3c' },{ name:'Bleu', ink:'#2980b9' },{ name:'Vert', ink:'#27ae60' },{ name:'Jaune', ink:'#f1c40f' }];
 let stroopData = {};
 function startStroop() {
-  stroopData = { q:0, correct:0, times:[], startTime:Date.now(), qStart:Date.now(), timerInterval:null };
+  // Montre l'écran "prêt", cache le jeu
+  document.getElementById('stroop-ready').style.display = 'flex';
+  document.getElementById('stroop-game').style.display  = 'none';
   document.getElementById('stroop-correct').textContent = '0';
+}
+
+function launchStroop() {
+  // Lance vraiment le test
+  document.getElementById('stroop-ready').style.display = 'none';
+  document.getElementById('stroop-game').style.display  = 'block';
+  stroopData = { q:0, correct:0, times:[], startTime:Date.now(), qStart:Date.now(), timerInterval:null };
   document.getElementById('stroop-feedback').style.display = 'none';
   clearInterval(stroopData.timerInterval);
   stroopData.timerInterval = setInterval(updateChrono, 100);
